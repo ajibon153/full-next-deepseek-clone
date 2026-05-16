@@ -23,7 +23,7 @@ import qrcode from "./qrcode.png";
 import three_dots from "./three_dots.svg";
 import new_icon from "./new_icon.svg";
 
-export const assets = {
+export const Assets = {
   arrow_icon,
   arrow_icon_dull,
   logo_text,
@@ -49,3 +49,5 @@ export const assets = {
   three_dots,
   new_icon,
 };
+
+export default Assets;
