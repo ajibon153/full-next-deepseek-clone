@@ -5,6 +5,8 @@ import Assets from "@/assets"
 import Sidebar from "@/components/sidebar"
 import PropmtBox from "@/components/PropmtBox"
 import { useAppStore } from "@/store/useAppStore"
+import Message from "@/components/Messages"
+import Messages from "@/components/Messages"
 
 export default function Home() {
     const messages = useAppStore((state) => state.messages)
@@ -34,7 +36,9 @@ export default function Home() {
                             <p className="text-sm mt-2">How can I help you today?</p>
                         </>
                     ) : (
-                        <div></div>
+                        <div>
+                            <Messages />
+                        </div>
                     )}
                     <PropmtBox />
                     <p className="text-xs absolute bottom-1 text-gray-500">AI-generated, for reference only</p>

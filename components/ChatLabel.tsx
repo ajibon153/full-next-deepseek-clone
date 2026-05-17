@@ -1,14 +1,56 @@
 import { Assets } from "@/assets";
+// import { useAppContext } from "@/context/AppContext";
+// import axios from "axios";
 import Image from "next/image";
+// import React from "react";
+// import toast from "react-hot-toast";
 
 const ChatLabel = ({ openMenu, setOpenMenu, id, name }) => {
+//   const { fetchUsersChats, chats, setSelectedChat } = useAppContext();
+
   const selectChat = () => {
+    // const chatData = chats.find((chat) => chat._id === id);
+    // setSelectedChat(chatData);
+    // console.log(chatData);
   };
 
   const renameHandler = async () => {
+    // try {
+    //   const newName = prompt("Enter new name");
+    //   if (!newName) return;
+    //   const { data } = await axios.post("/api/chat/rename", {
+    //     chatId: id,
+    //     name: newName,
+    //   });
+    //   if (data.success) {
+    //     fetchUsersChats();
+    //     setOpenMenu({ id: 0, open: false });
+    //     toast.success(data.message);
+    //   } else {
+    //     toast.error(data.message);
+    //   }
+    // } catch (error) {
+    //   toast.error(error.message);
+    // }
   };
 
   const deleteHandler = async () => {
+    // try {
+    //   const confirm = window.confirm(
+    //     "Are you sure you want to delete this chat?"
+    //   );
+    //   if (!confirm) return;
+    //   const { data } = await axios.post("/api/chat/delete", { chatId: id });
+    //   if (data.success) {
+    //     fetchUsersChats();
+    //     setOpenMenu({ id: 0, open: false });
+    //     toast.success(data.message);
+    //   } else {
+    //     toast.error(data.message);
+    //   }
+    // } catch (error) {
+    //   toast.error(error.message);
+    // }
   };
 
   return (

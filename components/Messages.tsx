@@ -1,8 +1,19 @@
 import { Assets } from "@/assets";
 import Image from "next/image";
+// import React, { useEffect } from "react";
 import Markdown from "react-markdown";
+// import Prism from "prismjs";
+// import toast from "react-hot-toast";
 
-const Message = ({ role, content }) => {
+const Messages = ({ role, content }) => {
+  const copyMessage = () => {
+//     navigator.clipboard.writeText(content);
+//     toast.success("Message copied to clipboard");
+  };
+
+//   useEffect(() => {
+//     // Prism.highlightAll();
+//   }, [content]);
 
   return (
     <div className="flex flex-col items-center w-full max-w-3xl text-sm">
@@ -83,4 +94,4 @@ const Message = ({ role, content }) => {
   );
 };
 
-export default Message;
+export default Messages;
