@@ -1,11 +1,14 @@
 import Assets from "@/assets"
 import Image from "next/image"
-import { useClerk } from "@clerk/nextjs"
+import { useClerk, UserButton } from "@clerk/nextjs"
 import { useAppStore } from "@/store/useAppStore"
+import { useState } from "react"
+import ChatLabel from "./ChatLabel"
 
 const Sidebar = ({ expand, setExpand }: { expand: boolean; setExpand: (v: boolean) => void }) => {
     const { openSignIn } = useClerk()
     const user = useAppStore((state) => state.user)
+    const [openMenu, setOpenMenu] = useState({ id: 0, open: false })
 
     return (
         <div
@@ -57,7 +60,7 @@ const Sidebar = ({ expand, setExpand }: { expand: boolean; setExpand: (v: boolea
 
                 <div className={`mt-8 text-white/25 text-sm ${expand ? "block" : "hidden"}`}>
                     <p className="my-1">Recents</p>
-                    {/* chatLabel */}
+                    <ChatLabel openMenu={openMenu} setOpenMenu={setOpenMenu} />
                 </div>
             </div>
 
@@ -91,7 +94,8 @@ const Sidebar = ({ expand, setExpand }: { expand: boolean; setExpand: (v: boolea
                     className={`flex items-center ${expand ? " hover:bg-white/10 rounded-lg" : "justify-center w-full"} gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer`}
                     onClick={() => (user ? null : openSignIn())}
                 >
-                    <Image src={Assets.profile_icon} alt="" className="w-7" />
+                    {user ? <UserButton /> : <Image src={Assets.profile_icon} alt="" className="w-7" />}
+
                     {expand && <span>My Profile</span>}
                 </div>
             </div>
