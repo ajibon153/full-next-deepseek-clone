@@ -5,7 +5,6 @@ import Assets from "@/assets"
 import Sidebar from "@/components/sidebar"
 import PropmtBox from "@/components/PropmtBox"
 import { useAppStore } from "@/store/useAppStore"
-import Message from "@/components/Messages"
 import Messages from "@/components/Messages"
 
 export default function Home() {
