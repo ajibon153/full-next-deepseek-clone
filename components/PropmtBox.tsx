@@ -1,11 +1,15 @@
 import Assets from "@/assets"
 import Image from "next/image"
 import { useAppStore } from "@/store/useAppStore"
+import toast from "react-hot-toast"
+import axios from "axios"
+import { useAppContext } from "@/context/AppContext"
 
 function PropmtBox() {
     const currentPrompt = useAppStore((state) => state.currentPrompt)
     const setCurrentPrompt = useAppStore((state) => state.setCurrentPrompt)
     const isLoading = useAppStore((state) => state.isLoading)
+    const setLoading = useAppStore((state) => state.setLoading)
     const sendMessage = useAppStore((state) => state.sendMessage)
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -14,6 +18,105 @@ function PropmtBox() {
             await sendMessage(currentPrompt)
         }
     }
+
+    
+  const { user, chats, setChats, selectedChat, setSelectedChat } =
+    useAppContext();
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendPrompt(e);
+    }
+  };
+
+  const sendPrompt = async (e) => {
+    const promptCopy = currentPrompt;
+
+    try {
+      e.preventDefault();
+      if (!user) return toast.error("Login to send message");
+      if (isLoading)
+        return toast.error("Wait for the previous prompt response");
+
+      setLoading(true);
+      setCurrentPrompt("");
+
+      const userPrompt = {
+        role: "user",
+        content: currentPrompt,
+        timestamp: Date.now(),
+      };
+
+      // Saving user prompt in chats array
+      setChats((prevChats) =>
+        prevChats.map((chat) =>
+          chat._id === selectedChat._id
+            ? {
+                ...chat,
+                messages: [...chat.messages, userPrompt],
+              }
+            : chat
+        )
+      );
+
+      // Saving user prompt in selected chat
+      setSelectedChat((prev) => ({
+        ...prev,
+        messages: [...prev.messages, userPrompt],
+      }));
+
+      const { data } = await axios.post("/api/chat/ai", {
+        chatId: selectedChat._id,
+        prompt: currentPrompt,
+      });
+
+      if (data.success) {
+        setChats((prevChats) =>
+          prevChats.map((chat) =>
+            chat._id === selectedChat._id
+              ? { ...chat, messages: [...chat.messages, data.data] }
+              : chat
+          )
+        );
+
+        const message = data.data.content;
+        const messageTokens = message.split(" ");
+        const assistantMessage = {
+          role: "assistant",
+          content: "",
+          timestamp: Date.now(),
+        };
+
+        setSelectedChat((prev) => ({
+          ...prev,
+          messages: [...prev.messages, assistantMessage],
+        }));
+
+        for (let i = 0; i < messageTokens.length; i++) {
+          setTimeout(() => {
+            assistantMessage.content = messageTokens.slice(0, i + 1).join(" ");
+            setSelectedChat((prev) => {
+              const updatedMessages = [
+                ...prev.messages.slice(0, -1),
+                assistantMessage,
+              ];
+
+              return { ...prev, messages: updatedMessages };
+            });
+          }, i * 100);
+        }
+      } else {
+        toast.error(data.message);
+        setCurrentPrompt(promptCopy);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      setCurrentPrompt(promptCopy);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     return (
         <form
